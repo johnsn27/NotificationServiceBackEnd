@@ -10,7 +10,13 @@ from googleapiclient.errors import HttpError
 import base64
 import mimetypes
 
-SCOPES = ['https://mail.google.com/'] 
+import sqlite3
+import pandas as pd
+from pandas import DataFrame
+import datetime
+from getFromDatabase import getEmail
+
+SCOPES = ['https://mail.google.com/']
 
 def main():
     creds = None
@@ -39,9 +45,9 @@ def main():
         for label in labels:
             print(label['name'])
     sender = "uninotificationserviceemail@gmail.com"
-    to = ""
-    subject = ""
-    message_text = ""
+    to = getEmail()
+    subject = "Room booking cancelled"
+    message_text = "test"
     message = create_message(sender, to, subject, message_text)
     send_message(service,'me',message)
 
