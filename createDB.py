@@ -11,7 +11,7 @@ c.execute('''CREATE TABLE BOOKINGS (
             [StartTime] datetime,
             [EndTime] datetime,
             FOREIGN KEY (UserId) REFERENCES USERS (id)
-            FOREIGN KEY (RoomId) REFERENCES USERS (id)
+            FOREIGN KEY (RoomId) REFERENCES RoomId (id)
              )''')
 
 c.execute('''CREATE TABLE ROOMS (
