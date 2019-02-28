@@ -5,10 +5,15 @@ from pandas import DataFrame
 conn = sqlite3.connect('BOOKING.db')  
 c = conn.cursor()
 
-# c.execute('''SELECT * FROM USERS WHERE USERS.id=1''')
-def getEmail():
-    c.execute('''SELECT Email FROM USERS,BOOKINGS
-    WHERE USERS.id == BOOKINGS.UserId''')
+def getUserID(BookingId):
+    c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+    UserIdList = [item[0] for item in c.fetchall()]
+    for UserId in UserIdList:
+        UserIdInt = int(UserId)
+    return UserIdInt
+
+def getEmail(UserId):
+    c.execute("SELECT Email FROM USERS WHERE id='%s'" % UserId)
     emailList = [item[0] for item in c.fetchall()]
     email = ''.join(emailList)
     return email

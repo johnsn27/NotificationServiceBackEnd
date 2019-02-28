@@ -18,7 +18,7 @@ from getFromDatabase import getEmail
 
 SCOPES = ['https://mail.google.com/']
 
-def main():
+def sendEmail(to):
     creds = None
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
@@ -45,7 +45,7 @@ def main():
         for label in labels:
             print(label['name'])
     sender = "uninotificationserviceemail@gmail.com"
-    to = getEmail()
+    to = to
     subject = "Room booking cancelled"
     message_text = "test"
     message = create_message(sender, to, subject, message_text)
@@ -65,6 +65,3 @@ def send_message(service, user_id, message):
     return message
   except HttpError as error:
     print('An error occurred: %s' % error)
-
-if __name__ == '__main__':
-    main()

@@ -1,2 +1,2 @@
-WatchedId,UserId,RoomId,Capacity,StartTime,EndTime
-1,1,1,2019-02-27 10:00:00,2019-02-27 11:00:00
+WatchedId,UserId,Capacity,StartTime,EndTime
+1,1,4,2019-02-27 10:00:00,2019-02-27 11:00:00

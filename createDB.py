@@ -31,7 +31,6 @@ c.execute('''CREATE TABLE USERS(
 c.execute('''CREATE TABLE WATCHED (
             [WatchedId] int,
             [UserId] int,
-            [RoomId] int,
             [Capacity] int,
             [StartTime] datetime,
             [EndTime] datetime,
