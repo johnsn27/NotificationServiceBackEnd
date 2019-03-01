@@ -10,9 +10,15 @@ from googleapiclient.errors import HttpError
 import base64
 import mimetypes
 
-SCOPES = ['https://mail.google.com/'] 
+import sqlite3
+import pandas as pd
+from pandas import DataFrame
+import datetime
+from getFromDatabase import getEmail
 
-def main():
+SCOPES = ['https://mail.google.com/']
+
+def sendEmail(to):
     creds = None
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
@@ -39,9 +45,9 @@ def main():
         for label in labels:
             print(label['name'])
     sender = "uninotificationserviceemail@gmail.com"
-    to = ""
-    subject = ""
-    message_text = ""
+    to = to
+    subject = "Room booking cancelled"
+    message_text = "test"
     message = create_message(sender, to, subject, message_text)
     send_message(service,'me',message)
 
@@ -59,6 +65,3 @@ def send_message(service, user_id, message):
     return message
   except HttpError as error:
     print('An error occurred: %s' % error)
-
-if __name__ == '__main__':
-    main()
