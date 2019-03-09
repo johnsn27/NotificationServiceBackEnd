@@ -18,7 +18,9 @@ def watch_room():
          content = request.json
          conn = sqlite3.connect('BOOKING.db')
          c = conn.cursor()
-         c.execute("INSERT INTO WATCHED (WatchedId,UserId,Capacity,StartTime,EndTime) VALUES (%s,%s,%s,'%s','%s')" % (content['WatchedId'], content['UserId'], content['Capacity'], content['StartTime'], content['EndTime']))
+         c.execute("SELECT COUNT(*) from WATCHED")
+         watched_id = int(c.fetchone()[0]) + 1
+         c.execute("INSERT INTO WATCHED (WatchedId,UserId,Capacity,StartTime,EndTime) VALUES (%i,%s,%s,'%s','%s')" % (watched_id, content['UserId'], content['Capacity'], content['StartTime'], content['EndTime']))
          conn.commit()
          conn.close()
          return jsonify(content), 200

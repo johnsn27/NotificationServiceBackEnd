@@ -20,7 +20,6 @@ Accepts POST requests containing JSON, which is written to the database WATCHED 
 JSON format should match the following:
 ```
 {
-    WatchedId: 1,
     UserId: 1,
     Capacity: 10,
     StartTime: "2019-02-27 10:00:00",
