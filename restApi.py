@@ -44,5 +44,16 @@ def get_watched_rooms():
    rows = c.fetchall()
    return json.dumps(results)    
 
+@app.route('/delete-watch/<int:watch>')
+def delete_watched_rooms(watch):
+   conn = sqlite3.connect("BOOKING.db")
+   conn.row_factory = sqlite3.Row
+   results = []
+   
+   c = conn.cursor()
+   c.execute("DELETE FROM WATCHED WHERE WatchedId=%s" % watch)
+   conn.commit()
+   conn.close()
+
 if __name__ == '__main__':
    app.run()
