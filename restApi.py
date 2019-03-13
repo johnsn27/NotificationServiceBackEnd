@@ -21,8 +21,11 @@ def get_bookings_by_user(user):
    c.execute("SELECT * from BOOKINGS WHERE UserId=%s" % user)
    for item in c.fetchall():
       # Why doesn't the below work with query string...
-      c.execute("SELECT Location from ROOMS WHERE id=1")
-      location = c.fetchone()[0]
+      c.execute("SELECT Location from ROOMS WHERE id=%s" % str(item[2]))
+      if str(c.fetchone()) == 'None' or None:
+         location = 'not found'
+      else:
+         location = int(c.fetchone()[0]) #well it's going to this else but is coming out as "None"
       row = json.loads('{ "BookingId":%s, "UserId":%s, "RoomId":%s, "StartTime":"%s", "EndTime":"%s", "Location": "%s"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4]), str(location)))
       results.append(row)
    
