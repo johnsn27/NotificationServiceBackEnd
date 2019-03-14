@@ -43,8 +43,8 @@ def get_watched_rooms():
    rows = c.fetchall()
    return json.dumps(results)    
 
-@app.route('/delete-watch/<int:watch>', methods = ['DELETE', 'OPTIONS'])
-def delete_watched_rooms(watch):
+@app.route('/delete-watch/<int:WatchId>', methods = ['DELETE', 'OPTIONS'])
+def delete_watched_rooms(WatchId):
    conn = sqlite3.connect("BOOKING.db")
    conn.row_factory = sqlite3.Row
    results = []
