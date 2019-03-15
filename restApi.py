@@ -1,7 +1,6 @@
 import sqlite3
 from flask import Flask, request, jsonify
 import json
-
 app = Flask(__name__)
 
 @app.after_request
@@ -43,6 +42,21 @@ def get_watched_rooms():
    
    rows = c.fetchall()
    return json.dumps(results)    
+
+@app.route('/delete-watch/<int:WatchId>', methods = ['DELETE', 'OPTIONS'])
+def delete_watched_rooms(WatchId):
+   conn = sqlite3.connect("BOOKING.db")
+   conn.row_factory = sqlite3.Row
+   results = []
+   
+   c = conn.cursor()
+   try:
+      c.execute("DELETE FROM WATCHED WHERE WatchedId=%s" % WatchId)
+      conn.commit()
+      conn.close()
+      return jsonify('')
+   except:
+         return 'Error', 500
 
 if __name__ == '__main__':
    app.run()
