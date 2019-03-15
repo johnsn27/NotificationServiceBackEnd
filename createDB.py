@@ -7,7 +7,7 @@ c.execute('''CREATE TABLE BOOKINGS (
             [BookingId] int,
             [UserId] int,
             [RoomId] int,
-            [Name] int,
+            [Name] text,
             [StartTime] datetime,
             [EndTime] datetime,
             FOREIGN KEY (UserId) REFERENCES USERS (id)
@@ -20,7 +20,7 @@ c.execute('''CREATE TABLE ROOMS (
             [Location] text,
             [Floor] text,
             [Capacity] int,
-            [Building] int
+            [Building] text
             )''')
 
 c.execute('''CREATE TABLE USERS(
@@ -41,3 +41,4 @@ c.execute('''CREATE TABLE WATCHED (
              )''')
 
 conn.commit()
+

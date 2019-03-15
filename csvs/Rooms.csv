@@ -1,3 +1,3 @@
-id,Name,Location,Floor,Capacity
-1,George Lucas,BC5 A3 M2,5,8
-2,Luther,BC5 A5 M1,5,4
+id,Name,Location,Floor,Capacity,Building
+1,George Lucas,BC5 A3 M2,5,8,White City
+2,Luther,BC5 A5 M1,5,4,White City
