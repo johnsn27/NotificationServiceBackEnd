@@ -1,7 +1,6 @@
 import sqlite3
 from flask import Flask, request, jsonify
 import json
-
 app = Flask(__name__)
 
 @app.after_request
@@ -103,53 +102,53 @@ def watch_room():
    else:
       return 'Not POST'
 
-# @app.route('/watch-room',methods = ['POST', 'GET', 'OPTIONS'])
-# def watch_room():
-#    if request.method == 'POST':
-#       try:
-#          content = request.json
-#          conn = sqlite3.connect('BOOKING.db')
-#          c = conn.cursor()
-#          c.execute("SELECT COUNT(*) from WATCHED")
-#          watched_id = int(c.fetchone()[0]) + 1
-#          c.execute("INSERT INTO WATCHED (WatchedId,UserId,Capacity,StartTime,EndTime) VALUES (%i,%s,%s,'%s','%s')" % (watched_id, content['UserId'], content['Capacity'], content['StartTime'], content['EndTime']))
-#          conn.commit()
-#          conn.close()
-#          return jsonify(content), 200
-#       except:
-#          return 'Error', 500
-#    else:
-#       return 'Not POST'
+@app.route('/watch-room',methods = ['POST', 'GET', 'OPTIONS'])
+def watch_room():
+   if request.method == 'POST':
+      try:
+         content = request.json
+         conn = sqlite3.connect('BOOKING.db')
+         c = conn.cursor()
+         c.execute("SELECT COUNT(*) from WATCHED")
+         watched_id = int(c.fetchone()[0]) + 1
+         c.execute("INSERT INTO WATCHED (WatchedId,UserId,Capacity,StartTime,EndTime) VALUES (%i,%s,%s,'%s','%s')" % (watched_id, content['UserId'], content['Capacity'], content['StartTime'], content['EndTime']))
+         conn.commit()
+         conn.close()
+         return jsonify(content), 200
+      except:
+         return 'Error', 500
+   else:
+      return 'Not POST'
 
-# @app.route('/watched-rooms')
-# def get_watched_rooms():
-#    conn = sqlite3.connect("BOOKING.db")
-#    conn.row_factory = sqlite3.Row
-#    results = []
+@app.route('/watched-rooms')
+def get_watched_rooms():
+   conn = sqlite3.connect("BOOKING.db")
+   conn.row_factory = sqlite3.Row
+   results = []
    
-#    c = conn.cursor()
-#    c.execute("SELECT * from WATCHED")
-#    for item in c.fetchall():
-#       row = json.loads('{ "WatchedId":%s, "UserId":%s, "Capacity":%s, "StartTime":"%s", "EndTime":"%s"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4])))
-#       results.append(row)
+   c = conn.cursor()
+   c.execute("SELECT * from WATCHED")
+   for item in c.fetchall():
+      row = json.loads('{ "WatchedId":%s, "UserId":%s, "Capacity":%s, "StartTime":"%s", "EndTime":"%s"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4])))
+      results.append(row)
    
-#    rows = c.fetchall()
-#    return json.dumps(results)  
+   rows = c.fetchall()
+   return json.dumps(results)    
 
-# @app.route('/users')
-# def users():
-#    con = sqlite3.connect("BOOKING.db")
-#    con.row_factory = sqlite3.Row
-#    cee = []
+@app.route('/delete-watch/<int:WatchId>', methods = ['DELETE', 'OPTIONS'])
+def delete_watched_rooms(WatchId):
+   conn = sqlite3.connect("BOOKING.db")
+   conn.row_factory = sqlite3.Row
+   results = []
    
-#    cur = con.cursor()
-#    cur.execute("select * from USERS")
-#    for item in cur.fetchall():
-#       num = json.loads('{ "id":%s, "name":"%s", "email":"%s"}' % (int(item[0]), str(item[1]), str(item[2])))
-#       cee.append(num)
-   
-#    rows = cur.fetchall()
-#    return json.dumps(cee)
+   c = conn.cursor()
+   try:
+      c.execute("DELETE FROM WATCHED WHERE WatchedId=%s" % WatchId)
+      conn.commit()
+      conn.close()
+      return jsonify('')
+   except:
+         return 'Error', 500
 
 if __name__ == '__main__':
-    app.run()
+   app.run()
