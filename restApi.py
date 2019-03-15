@@ -20,13 +20,11 @@ def get_bookings_by_user(user):
    c = conn.cursor()
    c.execute("SELECT * from BOOKINGS WHERE UserId=%s" % user)
    for item in c.fetchall():
-      # Why doesn't the below work with query string...
-      c.execute("SELECT Location from ROOMS WHERE id=%s" % str(item[2]))
-      if str(c.fetchone()) == 'None' or None:
-         location = 'not found'
-      else:
-         location = int(c.fetchone()[0]) #well it's going to this else but is coming out as "None"
-      row = json.loads('{ "BookingId":%s, "UserId":%s, "RoomId":%s, "StartTime":"%s", "EndTime":"%s", "Location": "%s"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4]), str(location)))
+      c.execute("SELECT Location from ROOMS WHERE id=%s" % int(item[2]))
+      location = str(c.fetchone()[0])
+      c.execute("SELECT Name from ROOMS WHERE id=%s" % int(item[2]))
+      name = str(c.fetchone()[0])
+      row = json.loads('{ "BookingId":%s, "UserId":%s, "RoomId":%s, "StartTime":"%s", "EndTime":"%s", "Location": "%s", "RoomName": "%s"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4]), location, name))
       results.append(row)
    
    return json.dumps(results)
@@ -40,7 +38,7 @@ def get_rooms_watched_by_user(user):
    c = conn.cursor()
    c.execute("SELECT * from WATCHED WHERE UserId=%s" % user)
    for item in c.fetchall():
-      row = json.loads('{ "WatchedId":%s, "UserId":%s, "Capacity":%s, "StartTime":"%s", "EndTime":"%s"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4])))
+      row = json.loads('{ "WatchedId":%s, "UserId":%s, "Capacity":%s, "StartTime":"%s", "EndTime":"%s", "Location":"LOCATION PLACEHOLDER", "RoomName":"ROOM NAME PLACEHOLDER"}' % (int(item[0]), int(item[1]), int(item[2]), str(item[3]), str(item[4])))
       results.append(row)
    
    rows = c.fetchall()
