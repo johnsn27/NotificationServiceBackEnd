@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, request, jsonify, redirect, url_for
+from flask import Flask, request, jsonify
 import json
 app = Flask(__name__)
 
@@ -51,7 +51,7 @@ def delete_watched_rooms(WatchId):
    
    c = conn.cursor()
    try:
-      c.execute("DELETE FROM WATCHED WHERE WatchedId=%s" % watch)
+      c.execute("DELETE FROM WATCHED WHERE WatchedId=%s" % WatchId)
       conn.commit()
       conn.close()
       return jsonify('')
