@@ -1,3 +1,4 @@
-id,Name,Email
-1,Nathan,johnsonn036@gmail.com
-2,User2,nathanjohnson036@gmail.com
+id,Firstname,Lastname,Email
+1,Nathan,Johnson,johnsonn036@gmail.com
+2,Firstname,Lastname,nathanjohnson036@gmail.com
+
