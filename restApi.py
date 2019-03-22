@@ -28,6 +28,21 @@ def watch_room():
    else:
       return 'Not POST'
 
+@app.route('/delete-booking/<int:BookingId>', methods = ['DELETE', 'OPTIONS'])
+def delete_booked_rooms(BookingId):
+   conn = sqlite3.connect("BOOKING.db")
+   conn.row_factory = sqlite3.Row
+   results = []
+   
+   c = conn.cursor()
+   try:
+      c.execute("DELETE FROM BOOKINGS WHERE BookingId=%s" % BookingId)
+      conn.commit()
+      conn.close()
+      return jsonify('')
+   except:
+         return 'Error', 500
+
 @app.route('/watched-rooms')
 def get_watched_rooms():
    conn = sqlite3.connect("BOOKING.db")
