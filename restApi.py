@@ -138,20 +138,26 @@ def delete_booked_rooms(BookingId):
    conn = sqlite3.connect("BOOKING.db")
    conn.row_factory = sqlite3.Row
    c = conn.cursor()
-   results = []
-   c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
-   UserIdList = [item[0] for item in c.fetchall()]
+   UserIdList = []
+   c.execute("SELECT RoomId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+   RoomIdList = [item[0] for item in c.fetchall()]
+   if(RoomIdList.__len__() > 0 ):
+      for RoomId in RoomIdList:
+         RoomIdInt = int(RoomId)
+         c.execute("SELECT Name FROM ROOMS WHERE id='%s'" % RoomIdInt)
+         roomNameList = [item[0] for item in c.fetchall()]
+         roomName = ''.join(roomNameList)
+         c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+         UserIdList = [item[0] for item in c.fetchall()]
    if(UserIdList.__len__() > 0 ):
       for UserId in UserIdList:
          UserIdInt = int(UserId)
          c.execute("SELECT Email FROM USERS WHERE id='%s'" % UserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         sendEmail(email)
+         sendEmail(email, roomName)
       else:
          print("Bookings table has no more results")
-
-   
    try:
       c.execute("DELETE FROM BOOKINGS WHERE BookingId=%s" % BookingId)
       conn.commit()

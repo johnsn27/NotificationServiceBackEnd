@@ -47,7 +47,7 @@ def sendEmail(to, roomName):
             print(label['name'])
     sender = "uninotificationserviceemail@gmail.com"
     subject = "Room booking cancelled"
-    message_text = "The room booking for " + roomName + "was cancelled"
+    message_text = "The room booking for " + roomName + " was cancelled"
     message = create_message(sender, to, subject, message_text)
     send_message(service,'me',message)
 
