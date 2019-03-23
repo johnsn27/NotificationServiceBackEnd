@@ -2,6 +2,7 @@ import sqlite3
 from flask import Flask, request, jsonify
 import json
 app = Flask(__name__)
+from sendEmail import sendEmail
 
 @app.after_request
 def after_request(response):
@@ -32,9 +33,21 @@ def watch_room():
 def delete_booked_rooms(BookingId):
    conn = sqlite3.connect("BOOKING.db")
    conn.row_factory = sqlite3.Row
-   results = []
-   
    c = conn.cursor()
+   results = []
+   c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+   UserIdList = [item[0] for item in c.fetchall()]
+   if(UserIdList.__len__() > 0 ):
+      for UserId in UserIdList:
+         UserIdInt = int(UserId)
+         c.execute("SELECT Email FROM USERS WHERE id='%s'" % UserIdInt)
+         emailList = [item[0] for item in c.fetchall()]
+         email = ''.join(emailList)
+         sendEmail(email)
+      else:
+         print("Bookings table has no more results")
+
+   
    try:
       c.execute("DELETE FROM BOOKINGS WHERE BookingId=%s" % BookingId)
       conn.commit()
