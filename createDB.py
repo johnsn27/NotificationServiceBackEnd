@@ -1,4 +1,5 @@
 import sqlite3
+from insertIntoDB import insertIntoDB
 
 def createDB(databaseName):
     conn = sqlite3.connect(databaseName)
@@ -43,3 +44,4 @@ def createDB(databaseName):
 
     conn.commit()
 
+    insertIntoDB(databaseName)
