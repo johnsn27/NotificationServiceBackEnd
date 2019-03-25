@@ -1,6 +1,4 @@
 import unittest
-import sys
-sys.path.insert(0, '/Users/johnsn27/Documents/Uni/NotificationServiceBackEnd')
 from getFromDatabase import getEmail, getUserID
 
 class TestUM(unittest.TestCase):
