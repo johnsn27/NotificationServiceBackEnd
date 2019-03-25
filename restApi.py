@@ -176,13 +176,14 @@ def delete_booked_rooms(BookingId):
             WatchedUserIdInt = int(WatchedUserId)
             print('WatchedUserIdInt:')
             print(WatchedUserIdInt)
-            
+
             c.execute("SELECT StartTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
             WatchedStartTimeList = [item[0] for item in c.fetchall()]
             for WatchedStartTimeString in WatchedStartTimeList:
                print(WatchedStartTimeString)
                f = '%Y-%m-%d %H:%M:%S'
                WatchedStartTime = datetime.datetime.strptime(WatchedStartTimeString, f)
+               
             c.execute("SELECT EndTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
             WatchedEndTimeList = [item[0] for item in c.fetchall()]
             for WatchedEndTimeString in WatchedEndTimeList:
