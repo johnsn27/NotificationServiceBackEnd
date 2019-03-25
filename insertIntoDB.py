@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 from pandas import DataFrame
 
+
 conn = sqlite3.connect('BOOKING.db')
 c = conn.cursor()
 
