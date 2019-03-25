@@ -18,7 +18,8 @@ from getFromDatabase import getEmail
 
 SCOPES = ['https://mail.google.com/']
 
-def sendEmail(to, roomName):
+def sendEmail(to, roomName, emailType):
+    print(emailType)
     print("sendEmail")
     creds = None
     if os.path.exists('token.pickle'):
@@ -46,8 +47,12 @@ def sendEmail(to, roomName):
         for label in labels:
             print(label['name'])
     sender = "uninotificationserviceemail@gmail.com"
-    subject = "Room booking cancelled"
-    message_text = "The room booking for " + roomName + " was cancelled"
+    if emailType == 'booking':
+        subject = "Room booking cancelled"
+        message_text = "The room booking for " + roomName + " was cancelled"
+    else:
+        subject = "Room booking cancelled"
+        message_text = roomName + " is now available"
     message = create_message(sender, to, subject, message_text)
     send_message(service,'me',message)
 

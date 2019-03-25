@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask, request, jsonify
 import json
+import datetime
 app = Flask(__name__)
 from sendEmail import sendEmail
 
@@ -138,24 +139,73 @@ def delete_booked_rooms(BookingId):
    conn = sqlite3.connect("BOOKING.db")
    conn.row_factory = sqlite3.Row
    c = conn.cursor()
-   UserIdList = []
+   BookingUserIdList = []
+   WatchedUserIdList = []
+
+   c.execute("SELECT StartTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+   bookingStartTimeList = [item[0] for item in c.fetchall()]
+   for bookingStartTimeString in bookingStartTimeList:
+      print(bookingStartTimeString)
+      f = '%Y-%m-%d %H:%M:%S'
+      BookingStartTime = datetime.datetime.strptime(bookingStartTimeString, f)
+
+   c.execute("SELECT EndTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+   bookingEndTimeList = [item[0] for item in c.fetchall()]
+   for bookingEndTimeString in bookingEndTimeList:
+      print(bookingEndTimeString)
+      f = '%Y-%m-%d %H:%M:%S'
+      BookingEndTime = datetime.datetime.strptime(bookingEndTimeString, f)
+
+
    c.execute("SELECT RoomId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
    RoomIdList = [item[0] for item in c.fetchall()]
    if(RoomIdList.__len__() > 0 ):
       for RoomId in RoomIdList:
          RoomIdInt = int(RoomId)
+         print('RoomIdInt:')
+         print(RoomIdInt)
          c.execute("SELECT Name FROM ROOMS WHERE id='%s'" % RoomIdInt)
          roomNameList = [item[0] for item in c.fetchall()]
          roomName = ''.join(roomNameList)
-         c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
-         UserIdList = [item[0] for item in c.fetchall()]
-   if(UserIdList.__len__() > 0 ):
-      for UserId in UserIdList:
-         UserIdInt = int(UserId)
-         c.execute("SELECT Email FROM USERS WHERE id='%s'" % UserIdInt)
+         print(roomName)
+         c.execute("SELECT UserId FROM WATCHED WHERE RoomId='%s'" % RoomIdInt)
+         WatchedUserIdList = [item[0] for item in c.fetchall()]
+         for WatchedUserId in WatchedUserIdList:
+            WatchedUserIdInt = int(WatchedUserId)
+            print('WatchedUserIdInt:')
+            print(WatchedUserIdInt)
+            c.execute("SELECT StartTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
+            WatchedStartTimeList = [item[0] for item in c.fetchall()]
+            for WatchedStartTimeString in WatchedStartTimeList:
+               print(WatchedStartTimeString)
+               f = '%Y-%m-%d %H:%M:%S'
+               WatchedStartTime = datetime.datetime.strptime(WatchedStartTimeString, f)
+            c.execute("SELECT EndTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
+            WatchedEndTimeList = [item[0] for item in c.fetchall()]
+            for WatchedEndTimeString in WatchedEndTimeList:
+               print(WatchedEndTimeString)
+               f = '%Y-%m-%d %H:%M:%S'
+               WatchedEndTime = datetime.datetime.strptime(WatchedEndTimeString, f)
+            c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
+            BookingUserIdList = [item[0] for item in c.fetchall()]
+
+   if(BookingUserIdList.__len__() > 0 ):
+      for BookingUserId in BookingUserIdList:
+         BookingUserIdInt = int(BookingUserId)
+         c.execute("SELECT Email FROM USERS WHERE id='%s'" % BookingUserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         sendEmail(email, roomName)
+         sendEmail(email, roomName, 'booking')
+      else:
+         print("Bookings table has no more results")
+   if(WatchedUserIdList.__len__() > 0 ):
+      for WatchedUserId in WatchedUserIdList:
+         WatchedUserIdInt = int(WatchedUserId)
+         c.execute("SELECT Email FROM USERS WHERE id='%s'" % WatchedUserIdInt)
+         emailList = [item[0] for item in c.fetchall()]
+         email = ''.join(emailList)
+         if BookingStartTime == WatchedStartTime and BookingEndTime == WatchedEndTime:
+            sendEmail(email, roomName, 'watched')
       else:
          print("Bookings table has no more results")
    try:
