@@ -1,7 +1,7 @@
 import unittest
 import os
 from createDB import createDB
-from getFromDatabase import getEmail, getUserID
+from getFromDatabase import *
 
 class TestUM(unittest.TestCase):
 
@@ -17,6 +17,24 @@ class TestUM(unittest.TestCase):
     def test_getUserID(self):
         bookingId = 1
         self.assertEqual(getUserID(bookingId), 1)
+
+    def test_getBookingStartTime(self):
+        bookingId = 1
+        self.assertEqual(getBookingStartTime(bookingId), datetime.datetime(2019, 2, 27, 10, 0))
+
+    def test_getBookingEndTime(self):
+        bookingId = 1
+        self.assertEqual(getBookingEndTime(bookingId), datetime.datetime(2019, 2, 27, 11, 0))
+
+    def test_getWatchedStartTime(self):
+        roomId = 1
+        userId = 1
+        self.assertEqual(getWatchedStartTime(roomId, userId), datetime.datetime(2019, 2, 27, 10, 0))
+
+    def test_getWatchedEndTime(self):
+        roomId = 1
+        userId = 1
+        self.assertEqual(getWatchedEndTime(roomId, userId), datetime.datetime(2019, 2, 27, 11, 0))
 
     os.remove(databaseName)
 
