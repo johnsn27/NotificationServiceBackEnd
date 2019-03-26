@@ -44,7 +44,7 @@ def get_rooms_watched_by_user(user):
       name = str(c.fetchone()[0])
       c.execute("SELECT Building from ROOMS WHERE id=%s" % int(item[2]))
       building = str(c.fetchone()[0])
-      c.execute("SELECT COUNT(*) from BOOKINGS WHERE BOOKINGS.RoomId=%s AND ((BOOKINGS.StartTime BETWEEN '%s' AND '%s') OR (BOOKINGS.EndTime BETWEEN '%s' AND '%s') OR ('%s' BETWEEN BOOKINGS.StartTime AND BOOKINGS.EndTime))" % (int(item[2]), str(item[4]), str(item[5]), str(item[4]), str(item[5]), str(item[4])))
+      c.execute("SELECT COUNT(*) from BOOKINGS WHERE BOOKINGS.RoomId=%s AND ((BOOKINGS.StartTime >= '%s' AND BOOKINGS.StartTime < '%s') OR (BOOKINGS.EndTime > '%s' AND BOOKINGS.EndTime < '%s') OR ('%s' >= BOOKINGS.StartTime AND '%s' < BOOKINGS.EndTime))" % (int(item[2]), str(item[4]), str(item[5]), str(item[4]), str(item[5]), str(item[4]), str(item[4])))
       if int(c.fetchone()[0]) == 0:
          availability = 'Available'
       else:
@@ -78,7 +78,7 @@ def find_meeting_room():
       show_unavailable = 'false'
    try:
       for item in c.fetchall():
-         c.execute("SELECT COUNT(*) from BOOKINGS WHERE BOOKINGS.RoomId=%s AND ((BOOKINGS.StartTime BETWEEN '%s' AND '%s') OR (BOOKINGS.EndTime BETWEEN '%s' AND '%s') OR ('%s' BETWEEN BOOKINGS.StartTime AND BOOKINGS.EndTime))" % (int(item[0]), start, end, start, end, start))
+         c.execute("SELECT COUNT(*) from BOOKINGS WHERE BOOKINGS.RoomId=%s AND ((BOOKINGS.StartTime >= '%s' AND BOOKINGS.StartTime < '%s') OR (BOOKINGS.EndTime > '%s' AND BOOKINGS.EndTime < '%s') OR ('%s' >= BOOKINGS.StartTime AND '%s' < BOOKINGS.EndTime))" % (int(item[0]), start, end, start, end, start, start))
          if int(c.fetchone()[0]) == 0:
             availability = 'Available'
          else:
@@ -99,7 +99,7 @@ def book_room():
          content = request.json
          conn = sqlite3.connect('BOOKING.db')
          c = conn.cursor()
-         c.execute("SELECT COUNT(*) from BOOKINGS, WATCHED WHERE BOOKINGS.RoomId=%s AND ((BOOKINGS.StartTime BETWEEN '%s' AND '%s') OR (BOOKINGS.EndTime BETWEEN '%s' AND '%s') OR ('%s' BETWEEN BOOKINGS.StartTime AND BOOKINGS.EndTime))" % (content['RoomId'], content['StartTime'], content['EndTime'], content['StartTime'], content['EndTime'], content['StartTime']))
+         c.execute("SELECT COUNT(*) from BOOKINGS WHERE BOOKINGS.RoomId=%s AND ((BOOKINGS.StartTime >= '%s' AND BOOKINGS.StartTime < '%s') OR (BOOKINGS.EndTime > '%s' AND BOOKINGS.EndTime < '%s') OR ('%s' >= BOOKINGS.StartTime AND '%s' < BOOKINGS.EndTime))" % (content['RoomId'], content['StartTime'], content['EndTime'], content['StartTime'], content['EndTime'], content['StartTime'], content['StartTime']))
          if int(c.fetchone()[0]) == 0:
             c.execute("SELECT COUNT(*) from BOOKINGS")
             booking_id = int(c.fetchone()[0]) + 1
