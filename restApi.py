@@ -215,7 +215,7 @@ def delete_booked_rooms(BookingId):
          c.execute("SELECT Email FROM USERS WHERE id='%s'" % WatchedUserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         if BookingStartTimeDate == WatchedStartTimeDate and BookingEndTimeDate == WatchedEndTimeDate:
+         if WatchedStartTimeDate >= BookingStartTimeDate and WatchedEndTimeDate <= BookingEndTimeDate and WatchedStartTimeDate < BookingEndTimeDate and WatchedEndTimeDate > BookingStartTimeDate:
             sendEmail(email, roomName, 'watched', WatchedStartTime , WatchedEndTime, WatchedDate)
       else:
          print("Bookings table has no more results")
