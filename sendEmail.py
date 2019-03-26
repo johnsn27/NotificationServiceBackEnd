@@ -51,7 +51,7 @@ def sendEmail(to, roomName, emailType, startTime, endTime):
         subject = "Room booking cancelled"
         message_text = "The room booking for " + roomName + " between " + startTime + " and " + endTime + " was cancelled"
     else:
-        subject = "Room booking cancelled"
+        subject = "Watched Room now available"
         message_text = roomName + " is now available between " + startTime + " and " + endTime
     message = create_message(sender, to, subject, message_text)
     send_message(service,'me',message)
