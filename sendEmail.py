@@ -18,7 +18,7 @@ from getFromDatabase import getEmail
 
 SCOPES = ['https://mail.google.com/']
 
-def sendEmail(to, roomName, emailType, startTime, endTime):
+def sendEmail(to, roomName, emailType, startTime, endTime, date):
     print(emailType)
     print("sendEmail")
     creds = None
@@ -49,10 +49,10 @@ def sendEmail(to, roomName, emailType, startTime, endTime):
     sender = "uninotificationserviceemail@gmail.com"
     if emailType == 'booking':
         subject = "Room booking cancelled"
-        message_text = "The room booking for " + roomName + " between " + startTime + " and " + endTime + " was cancelled"
+        message_text = "The room booking for " + roomName + " between " + startTime + " and " + endTime + " on the " + date + " was cancelled"
     else:
         subject = "Watched Room now available"
-        message_text = roomName + " is now available between " + startTime + " and " + endTime
+        message_text = roomName + " is now available between " + startTime + " and " + endTime + " on the " + date
     message = create_message(sender, to, subject, message_text)
     send_message(service,'me',message)
 

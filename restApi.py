@@ -150,6 +150,8 @@ def delete_booked_rooms(BookingId):
       print(BookingStartTimeDateString)
       f = '%Y-%m-%d %H:%M:%S'
       BookingStartTimeDate = datetime.datetime.strptime(BookingStartTimeDateString, f)
+      BookingStartTime = BookingStartTimeDate.strftime('%H:%M:%S')
+      BookingDate = BookingStartTimeDate.strftime('%Y-%m-%d')
 
    c.execute("SELECT EndTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
    BookingEndTimeDateList = [item[0] for item in c.fetchall()]
@@ -157,7 +159,7 @@ def delete_booked_rooms(BookingId):
       print(BookingEndTimeDateString)
       f = '%Y-%m-%d %H:%M:%S'
       BookingEndTimeDate = datetime.datetime.strptime(BookingEndTimeDateString, f)
-
+      BookingEndTime = BookingEndTimeDate.strftime('%H:%M:%S')
 
    c.execute("SELECT RoomId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
    RoomIdList = [item[0] for item in c.fetchall()]
@@ -183,8 +185,10 @@ def delete_booked_rooms(BookingId):
             WatchedStartTimeDateList = [item[0] for item in c.fetchall()]
             for WatchedStartTimeDateString in WatchedStartTimeDateList:
                print(WatchedStartTimeDateString)
-               f = '%Y-%m-%d %H:%M:%S'
-               WatchedStartTimeDate = datetime.datetime.strptime(WatchedStartTimeDateString, f)
+               dateTimeFormat = '%Y-%m-%d %H:%M:%S'
+               WatchedStartTimeDate = datetime.datetime.strptime(WatchedStartTimeDateString, dateTimeFormat)
+               WatchedStartTime = WatchedStartTimeDate.strftime('%H:%M:%S')
+               WatchedDate = WatchedStartTimeDate.strftime('%Y-%m-%d')
                
             c.execute("SELECT EndTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
             WatchedEndTimeDateList = [item[0] for item in c.fetchall()]
@@ -192,6 +196,7 @@ def delete_booked_rooms(BookingId):
                print(WatchedEndTimeDateString)
                f = '%Y-%m-%d %H:%M:%S'
                WatchedEndTimeDate = datetime.datetime.strptime(WatchedEndTimeDateString, f)
+               WatchedEndTime = WatchedEndTimeDate.strftime('%H:%M:%S')
             c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
             BookingUserIdList = [item[0] for item in c.fetchall()]
 
@@ -201,7 +206,7 @@ def delete_booked_rooms(BookingId):
          c.execute("SELECT Email FROM USERS WHERE id='%s'" % BookingUserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         sendEmail(email, roomName, 'booking',  BookingStartTimeDateString, BookingEndTimeDateString)
+         sendEmail(email, roomName, 'booking',  BookingStartTime, BookingEndTime, BookingDate)
       else:
          print("Bookings table has no more results")
    if(WatchedUserIdList.__len__() > 0 ):
@@ -211,7 +216,7 @@ def delete_booked_rooms(BookingId):
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
          if BookingStartTimeDate == WatchedStartTimeDate and BookingEndTimeDate == WatchedEndTimeDate:
-            sendEmail(email, roomName, 'watched', WatchedStartTimeDateString , WatchedEndTimeDateString)
+            sendEmail(email, roomName, 'watched', WatchedStartTime , WatchedEndTime, WatchedDate)
       else:
          print("Bookings table has no more results")
    try:
@@ -241,7 +246,6 @@ def get_watched_rooms():
 def delete_watched_rooms(WatchId):
    conn = sqlite3.connect("BOOKING.db")
    conn.row_factory = sqlite3.Row
-   results = []
    
    c = conn.cursor()
    try:
