@@ -143,20 +143,20 @@ def delete_booked_rooms(BookingId):
    WatchedUserIdList = []
 
    c.execute("SELECT StartTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
-   bookingStartTimeList = [item[0] for item in c.fetchall()]
-   bookingStartTimeString =""
-   bookingEndTimeString =""
-   for bookingStartTimeString in bookingStartTimeList:
-      print(bookingStartTimeString)
+   BookingStartTimeDateList = [item[0] for item in c.fetchall()]
+   BookingStartTimeDateString =""
+   BookingEndTimeDateString =""
+   for BookingStartTimeDateString in BookingStartTimeDateList:
+      print(BookingStartTimeDateString)
       f = '%Y-%m-%d %H:%M:%S'
-      BookingStartTime = datetime.datetime.strptime(bookingStartTimeString, f)
+      BookingStartTimeDate = datetime.datetime.strptime(BookingStartTimeDateString, f)
 
    c.execute("SELECT EndTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
-   bookingEndTimeList = [item[0] for item in c.fetchall()]
-   for bookingEndTimeString in bookingEndTimeList:
-      print(bookingEndTimeString)
+   BookingEndTimeDateList = [item[0] for item in c.fetchall()]
+   for BookingEndTimeDateString in BookingEndTimeDateList:
+      print(BookingEndTimeDateString)
       f = '%Y-%m-%d %H:%M:%S'
-      BookingEndTime = datetime.datetime.strptime(bookingEndTimeString, f)
+      BookingEndTimeDate = datetime.datetime.strptime(BookingEndTimeDateString, f)
 
 
    c.execute("SELECT RoomId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
@@ -180,18 +180,18 @@ def delete_booked_rooms(BookingId):
             print(WatchedUserIdInt)
 
             c.execute("SELECT StartTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
-            WatchedStartTimeList = [item[0] for item in c.fetchall()]
-            for WatchedStartTimeString in WatchedStartTimeList:
-               print(WatchedStartTimeString)
+            WatchedStartTimeDateList = [item[0] for item in c.fetchall()]
+            for WatchedStartTimeDateString in WatchedStartTimeDateList:
+               print(WatchedStartTimeDateString)
                f = '%Y-%m-%d %H:%M:%S'
-               WatchedStartTime = datetime.datetime.strptime(WatchedStartTimeString, f)
+               WatchedStartTimeDate = datetime.datetime.strptime(WatchedStartTimeDateString, f)
                
             c.execute("SELECT EndTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
-            WatchedEndTimeList = [item[0] for item in c.fetchall()]
-            for WatchedEndTimeString in WatchedEndTimeList:
-               print(WatchedEndTimeString)
+            WatchedEndTimeDateList = [item[0] for item in c.fetchall()]
+            for WatchedEndTimeDateString in WatchedEndTimeDateList:
+               print(WatchedEndTimeDateString)
                f = '%Y-%m-%d %H:%M:%S'
-               WatchedEndTime = datetime.datetime.strptime(WatchedEndTimeString, f)
+               WatchedEndTimeDate = datetime.datetime.strptime(WatchedEndTimeDateString, f)
             c.execute("SELECT UserId FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
             BookingUserIdList = [item[0] for item in c.fetchall()]
 
@@ -201,7 +201,7 @@ def delete_booked_rooms(BookingId):
          c.execute("SELECT Email FROM USERS WHERE id='%s'" % BookingUserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         sendEmail(email, roomName, 'booking',  bookingStartTimeString, bookingEndTimeString)
+         sendEmail(email, roomName, 'booking',  BookingStartTimeDateString, BookingEndTimeDateString)
       else:
          print("Bookings table has no more results")
    if(WatchedUserIdList.__len__() > 0 ):
@@ -210,8 +210,8 @@ def delete_booked_rooms(BookingId):
          c.execute("SELECT Email FROM USERS WHERE id='%s'" % WatchedUserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         if BookingStartTime == WatchedStartTime and BookingEndTime == WatchedEndTime:
-            sendEmail(email, roomName, 'watched', WatchedStartTimeString , WatchedEndTimeString)
+         if BookingStartTimeDate == WatchedStartTimeDate and BookingEndTimeDate == WatchedEndTimeDate:
+            sendEmail(email, roomName, 'watched', WatchedStartTimeDateString , WatchedEndTimeDateString)
       else:
          print("Bookings table has no more results")
    try:
