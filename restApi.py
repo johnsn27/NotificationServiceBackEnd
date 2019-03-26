@@ -144,6 +144,8 @@ def delete_booked_rooms(BookingId):
 
    c.execute("SELECT StartTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
    bookingStartTimeList = [item[0] for item in c.fetchall()]
+   bookingStartTimeString =""
+   bookingEndTimeString =""
    for bookingStartTimeString in bookingStartTimeList:
       print(bookingStartTimeString)
       f = '%Y-%m-%d %H:%M:%S'
@@ -199,7 +201,7 @@ def delete_booked_rooms(BookingId):
          c.execute("SELECT Email FROM USERS WHERE id='%s'" % BookingUserIdInt)
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
-         sendEmail(email, roomName, 'booking')
+         sendEmail(email, roomName, 'booking',  bookingStartTimeString, bookingEndTimeString)
       else:
          print("Bookings table has no more results")
    if(WatchedUserIdList.__len__() > 0 ):
@@ -209,7 +211,7 @@ def delete_booked_rooms(BookingId):
          emailList = [item[0] for item in c.fetchall()]
          email = ''.join(emailList)
          if BookingStartTime == WatchedStartTime and BookingEndTime == WatchedEndTime:
-            sendEmail(email, roomName, 'watched')
+            sendEmail(email, roomName, 'watched', WatchedStartTimeString , WatchedEndTimeString)
       else:
          print("Bookings table has no more results")
    try:
