@@ -147,7 +147,6 @@ def delete_booked_rooms(BookingId):
    BookingStartTimeDateString =""
    BookingEndTimeDateString =""
    for BookingStartTimeDateString in BookingStartTimeDateList:
-      print(BookingStartTimeDateString)
       f = '%Y-%m-%d %H:%M:%S'
       BookingStartTimeDate = datetime.datetime.strptime(BookingStartTimeDateString, f)
       BookingStartTime = BookingStartTimeDate.strftime('%H:%M:%S')
@@ -156,7 +155,6 @@ def delete_booked_rooms(BookingId):
    c.execute("SELECT EndTime FROM BOOKINGS WHERE BookingId='%s'" % BookingId)
    BookingEndTimeDateList = [item[0] for item in c.fetchall()]
    for BookingEndTimeDateString in BookingEndTimeDateList:
-      print(BookingEndTimeDateString)
       f = '%Y-%m-%d %H:%M:%S'
       BookingEndTimeDate = datetime.datetime.strptime(BookingEndTimeDateString, f)
       BookingEndTime = BookingEndTimeDate.strftime('%H:%M:%S')
@@ -166,25 +164,19 @@ def delete_booked_rooms(BookingId):
    if(RoomIdList.__len__() > 0 ):
       for RoomId in RoomIdList:
          RoomIdInt = int(RoomId)
-         print('RoomIdInt:')
-         print(RoomIdInt)
 
          c.execute("SELECT Name FROM ROOMS WHERE id='%s'" % RoomIdInt)
          roomNameList = [item[0] for item in c.fetchall()]
          roomName = ''.join(roomNameList)
-         print(roomName)
 
          c.execute("SELECT UserId FROM WATCHED WHERE RoomId='%s'" % RoomIdInt)
          WatchedUserIdList = [item[0] for item in c.fetchall()]
          for WatchedUserId in WatchedUserIdList:
             WatchedUserIdInt = int(WatchedUserId)
-            print('WatchedUserIdInt:')
-            print(WatchedUserIdInt)
 
             c.execute("SELECT StartTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
             WatchedStartTimeDateList = [item[0] for item in c.fetchall()]
             for WatchedStartTimeDateString in WatchedStartTimeDateList:
-               print(WatchedStartTimeDateString)
                dateTimeFormat = '%Y-%m-%d %H:%M:%S'
                WatchedStartTimeDate = datetime.datetime.strptime(WatchedStartTimeDateString, dateTimeFormat)
                WatchedStartTime = WatchedStartTimeDate.strftime('%H:%M:%S')
@@ -193,7 +185,6 @@ def delete_booked_rooms(BookingId):
             c.execute("SELECT EndTime FROM WATCHED WHERE RoomId='%s' AND UserId='%s'" % (RoomIdInt, WatchedUserIdInt))
             WatchedEndTimeDateList = [item[0] for item in c.fetchall()]
             for WatchedEndTimeDateString in WatchedEndTimeDateList:
-               print(WatchedEndTimeDateString)
                f = '%Y-%m-%d %H:%M:%S'
                WatchedEndTimeDate = datetime.datetime.strptime(WatchedEndTimeDateString, f)
                WatchedEndTime = WatchedEndTimeDate.strftime('%H:%M:%S')
